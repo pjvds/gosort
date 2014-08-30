@@ -21,7 +21,15 @@ func VerifySort(sort func([]int) []int, t *testing.T) {
 			t.Fatalf("number %v at %v is smaller than previous number %v", current, i, previous)
 		}
 	}
+}
 
+func BenchmarkSort(sort func([]int) []int, b *testing.B) {
+	b.StartTimer()
+	defer b.StopTimer()
+
+	for i := 0; i < b.N; i++ {
+		sort(smallSet)
+	}
 }
 
 func getRandomList(length int) []int {
