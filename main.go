@@ -14,9 +14,28 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 	input := getRandomList(1000)
 
-	for _, n := range input {
+	for _, n := range sleepSort(input) {
 		fmt.Println(n)
 	}
+}
+
+func sleepSort(input []int) []int {
+	length := len(input)
+	sorting := make(chan int)
+
+	for i := 0; i < length; i++ {
+		go func(n int) {
+			time.Sleep(time.Duration(n) * time.Millisecond * slack)
+			sorting <- n
+		}(input[i])
+	}
+
+	output := make([]int, length, length)
+	for i := 0; i < length; i++ {
+		output[i] = <-sorting
+	}
+
+	return output
 }
 
 func getRandomList(length int) []int {
